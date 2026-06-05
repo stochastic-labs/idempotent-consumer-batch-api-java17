@@ -1,3 +1,10 @@
+app:
+  messaging:
+    input-topic: ${APP_MESSAGING_INPUT_TOPIC:stochastic-input}
+  kafka:
+    consumer:
+      enabled: ${APP_KAFKA_CONSUMER_ENABLED:true}
+
 server:
   port: ${SERVER_PORT:8082}
 
