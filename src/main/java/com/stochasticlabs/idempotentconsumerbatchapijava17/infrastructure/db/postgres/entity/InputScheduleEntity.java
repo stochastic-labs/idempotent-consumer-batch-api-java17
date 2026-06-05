@@ -1,6 +1,6 @@
 package com.stochasticlabs.idempotentconsumerbatchapijava17.infrastructure.db.postgres.entity;
 
-import com.stochasticlabs.idempotentconsumerbatchapijava17.domain.entity.Status;
+import com.stochasticlabs.idempotentconsumerbatchapijava17.domain.valueobject.Status;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
