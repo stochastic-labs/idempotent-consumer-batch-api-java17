@@ -29,15 +29,13 @@ public class InputKafkaConsumer {
             topics = "${app.messaging.input-topic}",
             groupId = "${spring.kafka.consumer.group-id:idempotent-consumer-group}"
     )
-    public void consume(ConsumerRecord<String, String> record) {
-        try {
-            String json = record.value();
-            log.info("[input-kafka-consumer-start] Start: {}", json);
-            InputDTO dto = objectMapper.readValue(json, InputDTO.class);
-            createInputUseCase.create(dto);
-            log.info("[input-kafka-consumer-end] End: {}", json);
-        } catch (Exception e) {
-            log.error("[input-kafka-consumer-error] Error: {}", e.getMessage(), e);
-        }
+    public void consume(ConsumerRecord<String, String> record) throws Exception {
+        String json = record.value();
+        log.info("[input-kafka-consumer-start] Start: {}", json);
+
+        InputDTO dto = objectMapper.readValue(json, InputDTO.class);
+        createInputUseCase.create(dto);
+
+        log.info("[input-kafka-consumer-end] End: {}", json);
     }
 }
