@@ -1,7 +1,9 @@
 app:
   messaging:
-    input-topic: ${APP_MESSAGING_INPUT_TOPIC:stochastic-input}
+    rabbit-exchange: ${APP_RABBIT_EXCHANGE:stochastic-exchange}
+    rabbit-routing-key: ${APP_RABBIT_ROUTING_KEY:stochastic-routing-key-input}
   kafka:
+    input-topic: ${APP_KAFKA_INPUT_TOPIC:stochastic-input}
     consumer:
       enabled: ${APP_KAFKA_CONSUMER_ENABLED:true}
 
@@ -9,11 +11,23 @@ server:
   port: ${SERVER_PORT:8082}
 
 spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    template:
+      retry:
+        enabled: true
+        initial-interval: 2000ms
+        max-attempts: 3
+
   data:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       timeout: 2000ms
+
   batch:
     job:
       enabled: false
