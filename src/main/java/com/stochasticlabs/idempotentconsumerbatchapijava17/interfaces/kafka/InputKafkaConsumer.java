@@ -3,6 +3,7 @@ package com.stochasticlabs.idempotentconsumerbatchapijava17.interfaces.kafka;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stochasticlabs.idempotentconsumerbatchapijava17.application.dto.InputDTO;
 import com.stochasticlabs.idempotentconsumerbatchapijava17.application.usecase.CreateInputUseCase;
+import com.stochasticlabs.idempotentconsumerbatchapijava17.infrastructure.security.IdempotencyValidator;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,19 @@ public class InputKafkaConsumer {
 
     private final CreateInputUseCase createInputUseCase;
 
+    private final IdempotencyValidator idempotencyValidator;
+
     private final ObjectMapper objectMapper;
 
     private static final Logger log = LoggerFactory.getLogger(InputKafkaConsumer.class);
 
-    public InputKafkaConsumer(CreateInputUseCase createInputUseCase, ObjectMapper objectMapper) {
+    public InputKafkaConsumer(
+            CreateInputUseCase createInputUseCase,
+            IdempotencyValidator idempotencyValidator,
+            ObjectMapper objectMapper
+    ) {
         this.createInputUseCase = createInputUseCase;
+        this.idempotencyValidator = idempotencyValidator;
         this.objectMapper = objectMapper;
     }
 
@@ -34,6 +42,10 @@ public class InputKafkaConsumer {
         log.info("[input-kafka-consumer-start] Start: {}", json);
 
         InputDTO dto = objectMapper.readValue(json, InputDTO.class);
+        if (idempotencyValidator.isDuplicate(String.valueOf(dto))) {
+            return;
+        }
+
         createInputUseCase.create(dto);
 
         log.info("[input-kafka-consumer-end] End: {}", json);

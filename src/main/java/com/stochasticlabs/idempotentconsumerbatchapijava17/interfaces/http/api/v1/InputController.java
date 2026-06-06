@@ -2,6 +2,7 @@ package com.stochasticlabs.idempotentconsumerbatchapijava17.interfaces.http.api.
 
 import com.stochasticlabs.idempotentconsumerbatchapijava17.application.dto.InputDTO;
 import com.stochasticlabs.idempotentconsumerbatchapijava17.application.usecase.CreateInputUseCase;
+import com.stochasticlabs.idempotentconsumerbatchapijava17.infrastructure.security.IdempotencyValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,8 +18,14 @@ public class InputController {
 
     private final CreateInputUseCase createInputUseCase;
 
-    public InputController(CreateInputUseCase createInputUseCase) {
+    private final IdempotencyValidator idempotencyValidator;
+
+    public InputController(
+            CreateInputUseCase createInputUseCase,
+            IdempotencyValidator idempotencyValidator
+    ) {
         this.createInputUseCase = createInputUseCase;
+        this.idempotencyValidator = idempotencyValidator;
     }
 
     @Operation(summary = "Process input", description = "Process input")
@@ -30,6 +37,9 @@ public class InputController {
     @PostMapping("/input")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@Validated @RequestBody InputDTO dto) {
+        if (idempotencyValidator.isDuplicate(String.valueOf(dto))) {
+            return;
+        }
         createInputUseCase.create(dto);
     }
 }
