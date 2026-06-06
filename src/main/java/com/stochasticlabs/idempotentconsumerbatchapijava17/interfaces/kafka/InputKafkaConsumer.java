@@ -34,7 +34,7 @@ public class InputKafkaConsumer {
     }
 
     @KafkaListener(
-            topics = "${app.messaging.input-topic}",
+            topics = "${app.kafka.input-topic}",
             groupId = "${spring.kafka.consumer.group-id:idempotent-consumer-group}"
     )
     public void consume(ConsumerRecord<String, String> record) throws Exception {
