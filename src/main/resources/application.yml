@@ -1,4 +1,6 @@
 app:
+  api:
+    http-enabled: ${APP_API_HTTP_ENABLED:true}
   messaging:
     rabbit-exchange: ${APP_RABBIT_EXCHANGE:stochastic-exchange}
     rabbit-routing-key: ${APP_RABBIT_ROUTING_KEY:stochastic-routing-key-input}
@@ -30,7 +32,7 @@ spring:
 
   batch:
     job:
-      enabled: false
+      enabled: ${SPRING_BATCH_JOB_ENABLED:true}
     jdbc:
       initialize-schema: always
       database-platform: postgres
