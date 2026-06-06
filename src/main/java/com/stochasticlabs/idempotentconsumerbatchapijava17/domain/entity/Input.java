@@ -8,4 +8,12 @@ public record Input (int integer, Status status) {
             throw new IllegalArgumentException("The value cannot be negative");
         }
     }
+
+    public int generateStochasticValue() {
+        long seed = integer;
+        for (int i = 0; i < 10; i++) {
+            seed = (seed * 1103515245L + 12345L) & 0x7FFFFFFF;
+        }
+        return (int) seed;
+    }
 }
