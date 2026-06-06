@@ -15,7 +15,6 @@ public class CreateInputUseCase {
 
     public void create(InputDTO inputDTO) {
         Input input = new Input(inputDTO.integer(), Status.PENDING);
-        // TODO: idempotent
         inputRepository.save(input);
     }
 }
