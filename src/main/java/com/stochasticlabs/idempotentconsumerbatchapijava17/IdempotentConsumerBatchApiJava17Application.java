@@ -12,12 +12,10 @@ public class IdempotentConsumerBatchApiJava17Application {
         SpringApplication app = new SpringApplication(IdempotentConsumerBatchApiJava17Application.class);
 
         String apiEnabled = System.getenv("APP_API_HTTP_ENABLED");
-
         if ("false".equalsIgnoreCase(apiEnabled)) {
             app.setWebApplicationType(WebApplicationType.NONE);
         }
 
         app.run(args);
-
     }
 }
