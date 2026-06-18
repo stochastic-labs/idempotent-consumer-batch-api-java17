@@ -1,4 +1,4 @@
-FROM maven:3.8.7-eclipse-temurin-11 AS builder
+FROM maven:3.8.7-eclipse-temurin-17 AS builder
 
 WORKDIR /build
 
@@ -11,7 +11,7 @@ RUN mvn clean package -DskipTests
 
 ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.32.0/opentelemetry-javaagent.jar /build/opentelemetry-javaagent.jar
 
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
