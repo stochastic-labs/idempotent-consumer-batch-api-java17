@@ -30,3 +30,5 @@ d-stop:
 
 d-log:
 	docker logs -f --tail 100 $(APP_NAME)
+
+reload: d-stop d-build d-run d-log
